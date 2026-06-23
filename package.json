@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "app:start": "powershell -ExecutionPolicy Bypass -File scripts/start.ps1",
+    "app:stop": "powershell -ExecutionPolicy Bypass -File scripts/stop.ps1",
     "build": "next build",
     "start": "next start",
     "test": "vitest run --passWithNoTests",

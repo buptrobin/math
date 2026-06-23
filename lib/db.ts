@@ -102,14 +102,16 @@ export function createAppDatabase(dbPath = getDefaultDbPath()) {
     close: () => sqlite.close(),
     getKnowledgePoint: () =>
       sqlite.prepare("SELECT * FROM knowledge_points WHERE id = ?").get(functionDomainSeed.knowledgePoint.id) as unknown as KnowledgePointRow | undefined,
-    getLessons: () => sqlite.prepare("SELECT * FROM lessons ORDER BY order_index").all() as unknown as LessonRow[],
-    getQuestionsByLesson: (lessonId: string) => sqlite.prepare("SELECT * FROM questions WHERE lesson_id = ? ORDER BY id").all(lessonId) as unknown as QuestionRow[],
-    getAllQuestions: () => sqlite.prepare("SELECT * FROM questions ORDER BY lesson_id, id").all() as unknown as QuestionRow[],
-    getAttempts: (userId: string) => sqlite.prepare("SELECT * FROM attempts WHERE user_id = ? ORDER BY created_at DESC").all(userId) as unknown as AttemptRow[],
+    getLessons: () => plainRows<LessonRow>(sqlite.prepare("SELECT * FROM lessons ORDER BY order_index").all()),
+    getQuestionsByLesson: (lessonId: string) => plainRows<QuestionRow>(sqlite.prepare("SELECT * FROM questions WHERE lesson_id = ? ORDER BY id").all(lessonId)),
+    getAllQuestions: () => plainRows<QuestionRow>(sqlite.prepare("SELECT * FROM questions ORDER BY lesson_id, id").all()),
+    getAttempts: (userId: string) => plainRows<AttemptRow>(sqlite.prepare("SELECT * FROM attempts WHERE user_id = ? ORDER BY created_at DESC").all(userId)),
     getDueReviewTasks: (userId: string, now = new Date()) =>
-      sqlite
-        .prepare("SELECT * FROM review_tasks WHERE user_id = ? AND status = 'pending' AND scheduled_at <= ? ORDER BY scheduled_at")
-        .all(userId, now.toISOString()) as unknown as ReviewTaskRow[],
+      plainRows<ReviewTaskRow>(
+        sqlite
+          .prepare("SELECT * FROM review_tasks WHERE user_id = ? AND status = 'pending' AND scheduled_at <= ? ORDER BY scheduled_at")
+          .all(userId, now.toISOString())
+      ),
     recordAttempt: (input: AttemptInput) => recordAttempt(sqlite, input),
     updateLatestAttemptErrorTag: (userId: string, questionId: string, selectedErrorTag: ErrorTag) => {
       const latest = sqlite
@@ -127,6 +129,10 @@ export function createAppDatabase(dbPath = getDefaultDbPath()) {
 }
 
 export type AppDatabase = ReturnType<typeof createAppDatabase>;
+
+function plainRows<T>(rows: unknown[]): T[] {
+  return rows.map((row) => ({ ...(row as Record<string, unknown>) }) as T);
+}
 
 function migrate(sqlite: DatabaseSync) {
   sqlite.exec(`
