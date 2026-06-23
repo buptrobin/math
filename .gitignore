@@ -1,2 +1,6 @@
 .superpowers/
 docs/*.txt
+node_modules/
+.next/
+.data/
+tsconfig.tsbuildinfo

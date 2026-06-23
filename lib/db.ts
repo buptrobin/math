@@ -111,6 +111,14 @@ export function createAppDatabase(dbPath = getDefaultDbPath()) {
         .prepare("SELECT * FROM review_tasks WHERE user_id = ? AND status = 'pending' AND scheduled_at <= ? ORDER BY scheduled_at")
         .all(userId, now.toISOString()) as unknown as ReviewTaskRow[],
     recordAttempt: (input: AttemptInput) => recordAttempt(sqlite, input),
+    updateLatestAttemptErrorTag: (userId: string, questionId: string, selectedErrorTag: ErrorTag) => {
+      const latest = sqlite
+        .prepare("SELECT id FROM attempts WHERE user_id = ? AND question_id = ? ORDER BY created_at DESC LIMIT 1")
+        .get(userId, questionId) as unknown as { id: number } | undefined;
+      if (latest) {
+        sqlite.prepare("UPDATE attempts SET selected_error_tag = ? WHERE id = ?").run(selectedErrorTag, latest.id);
+      }
+    },
     completeReviewTask: (taskId: number) => {
       sqlite.prepare("UPDATE review_tasks SET status = 'completed' WHERE id = ?").run(taskId);
     },

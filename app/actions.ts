@@ -12,7 +12,6 @@ const demoUserId = "demo-student";
 export async function submitAnswerAction(input: {
   questionId: string;
   userAnswer: string;
-  selectedErrorTag?: ErrorTag;
   hintsUsed: number;
 }) {
   const question = functionDomainSeed.questions.find((item) => item.id === input.questionId);
@@ -28,7 +27,7 @@ export async function submitAnswerAction(input: {
       questionId: input.questionId,
       userAnswer: input.userAnswer,
       isCorrect: grade.isCorrect,
-      selectedErrorTag: input.selectedErrorTag,
+      selectedErrorTag: undefined,
       hintsUsed: input.hintsUsed
     });
   } finally {
@@ -41,6 +40,16 @@ export async function submitAnswerAction(input: {
     explanation: question.explanation,
     commonMistake: question.commonMistake
   };
+}
+
+export async function saveErrorTagAction(input: { questionId: string; selectedErrorTag: ErrorTag }) {
+  const db = createAppDatabase();
+  try {
+    db.updateLatestAttemptErrorTag(demoUserId, input.questionId, input.selectedErrorTag);
+  } finally {
+    db.close();
+  }
+  revalidatePath("/");
 }
 
 export async function submitFeynmanAction(input: { prompt: string; userText: string }) {
