@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { submitFeynmanAction } from "@/app/actions";
+import { MathText } from "@/components/math-text";
 import { QuestionCard } from "@/components/question-card";
 import { ReviewPanel } from "@/components/review-panel";
 import { functionDomainSeed } from "@/data/function-domain.seed";
@@ -30,12 +31,18 @@ export function LessonShell({ lessons, questions, reviewTasks }: { lessons: Less
           {lesson.sectionType === "textbook_explanation" && (
             <div className="textbookBlock">
               <h3>课本说法</h3>
-              <p>{functionDomainSeed.textbookExplanation.formal}</p>
+              <p>
+                <MathText>{functionDomainSeed.textbookExplanation.formal}</MathText>
+              </p>
               <h3>孩子版解释</h3>
-              <p>{functionDomainSeed.textbookExplanation.studentFriendly}</p>
+              <p>
+                <MathText>{functionDomainSeed.textbookExplanation.studentFriendly}</MathText>
+              </p>
               <div className="ruleCards">
                 {functionDomainSeed.textbookExplanation.ruleCards.map((rule) => (
-                  <div key={rule}>{rule}</div>
+                  <div key={rule}>
+                    <MathText>{rule}</MathText>
+                  </div>
                 ))}
               </div>
             </div>
@@ -44,7 +51,9 @@ export function LessonShell({ lessons, questions, reviewTasks }: { lessons: Less
             <div className="feynmanList">
               {functionDomainSeed.feynmanPrompts.map((prompt) => (
                 <div key={prompt.id} className="feynmanCard">
-                  <h3>{prompt.prompt}</h3>
+                  <h3>
+                    <MathText>{prompt.prompt}</MathText>
+                  </h3>
                   <textarea rows={4} value={feynmanText[prompt.id] ?? ""} onChange={(event) => setFeynmanText({ ...feynmanText, [prompt.id]: event.target.value })} />
                   <button
                     type="button"

@@ -199,6 +199,10 @@ textarea {
   min-width: 82px;
 }
 
+.mathInline {
+  white-space: nowrap;
+}
+
 .activeOption,
 .activeTag {
   border-color: #0f766e;

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Lightbulb, Send } from "lucide-react";
 import { saveErrorTagAction, submitAnswerAction } from "@/app/actions";
 import { ErrorTagPicker } from "@/components/error-tag-picker";
+import { MathText } from "@/components/math-text";
 import type { ErrorTag, QuestionSeed } from "@/lib/types";
 
 export function QuestionCard({ question }: { question: QuestionSeed }) {
@@ -42,13 +43,19 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
         <span>难度 {question.difficulty}</span>
         <span>{question.examPoint}</span>
       </div>
-      <h3>{question.questionText}</h3>
-      {question.questionType === "example" && <div className="exampleBox">{question.explanation}</div>}
+      <h3>
+        <MathText>{question.questionText}</MathText>
+      </h3>
+      {question.questionType === "example" && (
+        <div className="exampleBox">
+          <MathText>{question.explanation}</MathText>
+        </div>
+      )}
       {question.options?.length ? (
         <div className="optionList">
           {question.options.map((option, index) => (
             <button key={option} type="button" className={answer === option ? "option activeOption" : "option"} onClick={() => setAnswer(option)}>
-              <strong>{String.fromCharCode(65 + index)}.</strong> {option}
+              <strong>{String.fromCharCode(65 + index)}.</strong> <MathText>{option}</MathText>
             </button>
           ))}
         </div>
@@ -68,7 +75,9 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
       {hintsUsed > 0 && (
         <div className="hintBox">
           {question.hints.slice(0, hintsUsed).map((hint) => (
-            <p key={hint}>{hint}</p>
+            <p key={hint}>
+              <MathText>{hint}</MathText>
+            </p>
           ))}
         </div>
       )}
@@ -84,8 +93,14 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
       {result && (!needsErrorTag || errorTagSaved) && (
         <div className={result.isCorrect ? "resultBox correct" : "resultBox wrong"}>
           <strong>{result.isCorrect ? "答对了" : "这题先记入错题"}</strong>
-          <p>{result.explanation}</p>
-          {!result.isCorrect && <p>易错点：{result.commonMistake}</p>}
+          <p>
+            <MathText>{result.explanation}</MathText>
+          </p>
+          {!result.isCorrect && (
+            <p>
+              易错点：<MathText>{result.commonMistake}</MathText>
+            </p>
+          )}
         </div>
       )}
     </article>
