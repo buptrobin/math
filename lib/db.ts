@@ -101,15 +101,15 @@ export function createAppDatabase(dbPath = getDefaultDbPath()) {
   return {
     close: () => sqlite.close(),
     getKnowledgePoint: () =>
-      sqlite.prepare("SELECT * FROM knowledge_points WHERE id = ?").get(functionDomainSeed.knowledgePoint.id) as KnowledgePointRow | undefined,
-    getLessons: () => sqlite.prepare("SELECT * FROM lessons ORDER BY order_index").all() as LessonRow[],
-    getQuestionsByLesson: (lessonId: string) => sqlite.prepare("SELECT * FROM questions WHERE lesson_id = ? ORDER BY id").all(lessonId) as QuestionRow[],
-    getAllQuestions: () => sqlite.prepare("SELECT * FROM questions ORDER BY lesson_id, id").all() as QuestionRow[],
-    getAttempts: (userId: string) => sqlite.prepare("SELECT * FROM attempts WHERE user_id = ? ORDER BY created_at DESC").all(userId) as AttemptRow[],
+      sqlite.prepare("SELECT * FROM knowledge_points WHERE id = ?").get(functionDomainSeed.knowledgePoint.id) as unknown as KnowledgePointRow | undefined,
+    getLessons: () => sqlite.prepare("SELECT * FROM lessons ORDER BY order_index").all() as unknown as LessonRow[],
+    getQuestionsByLesson: (lessonId: string) => sqlite.prepare("SELECT * FROM questions WHERE lesson_id = ? ORDER BY id").all(lessonId) as unknown as QuestionRow[],
+    getAllQuestions: () => sqlite.prepare("SELECT * FROM questions ORDER BY lesson_id, id").all() as unknown as QuestionRow[],
+    getAttempts: (userId: string) => sqlite.prepare("SELECT * FROM attempts WHERE user_id = ? ORDER BY created_at DESC").all(userId) as unknown as AttemptRow[],
     getDueReviewTasks: (userId: string, now = new Date()) =>
       sqlite
         .prepare("SELECT * FROM review_tasks WHERE user_id = ? AND status = 'pending' AND scheduled_at <= ? ORDER BY scheduled_at")
-        .all(userId, now.toISOString()) as ReviewTaskRow[],
+        .all(userId, now.toISOString()) as unknown as ReviewTaskRow[],
     recordAttempt: (input: AttemptInput) => recordAttempt(sqlite, input),
     completeReviewTask: (taskId: number) => {
       sqlite.prepare("UPDATE review_tasks SET status = 'completed' WHERE id = ?").run(taskId);
