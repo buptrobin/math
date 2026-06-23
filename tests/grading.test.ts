@@ -27,4 +27,10 @@ describe("gradeAnswer", () => {
     expect(question).toBeDefined();
     expect(gradeAnswer(question!, "X≥1且X≠3").isCorrect).toBe(true);
   });
+
+  it("accepts angle bracket not-equal syntax", () => {
+    const question = functionDomainSeed.questions.find((item) => item.id === "q-example-1");
+    expect(question).toBeDefined();
+    expect(gradeAnswer(question!, "x>=1且x<>3").isCorrect).toBe(true);
+  });
 });

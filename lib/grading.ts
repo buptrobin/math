@@ -9,6 +9,7 @@ const replacements: Array<[RegExp, string]> = [
   [/\s+/g, ""],
   [/U/g, "∪"],
   [/，/g, ","],
+  [/<>/g, "!="],
   [/！=/g, "!="],
   [/≠/g, "!="],
   [/≥/g, ">="],
