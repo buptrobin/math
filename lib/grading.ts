@@ -13,6 +13,7 @@ const replacements: Array<[RegExp, string]> = [
   [/≠/g, "!="],
   [/≥/g, ">="],
   [/≤/g, "<="],
+  [/[ＸX]/g, "x"],
   [/＋/g, "+"],
   [/－/g, "-"]
 ];
