@@ -21,7 +21,20 @@ const replacements: Array<[RegExp, string]> = [
 
 export function normalizeAnswer(value: string): string {
   const compact = replacements.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value.trim());
-  return compact.replace(/>=/g, "≥").replace(/<=/g, "≤").replace(/!=/g, "≠");
+  const normalized = compact.replace(/>=/g, "≥").replace(/<=/g, "≤").replace(/!=/g, "≠");
+  return normalizeConjunction(normalized);
+}
+
+function normalizeConjunction(value: string): string {
+  if (!value.includes("且")) {
+    return value;
+  }
+
+  return value
+    .split("且")
+    .filter(Boolean)
+    .sort((left, right) => left.localeCompare(right))
+    .join("且");
 }
 
 export function gradeAnswer(question: QuestionSeed, userAnswer: string): GradeResult {

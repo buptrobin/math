@@ -33,4 +33,10 @@ describe("gradeAnswer", () => {
     expect(question).toBeDefined();
     expect(gradeAnswer(question!, "x>=1且x<>3").isCorrect).toBe(true);
   });
+
+  it("accepts reordered conjunction conditions", () => {
+    const question = functionDomainSeed.questions.find((item) => item.id === "q-example-1");
+    expect(question).toBeDefined();
+    expect(gradeAnswer(question!, "x<>3且x>=1").isCorrect).toBe(true);
+  });
 });
