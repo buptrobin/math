@@ -16,6 +16,12 @@ describe("gradeAnswer", () => {
     expect(gradeAnswer(question!, "不可以").isCorrect).toBe(true);
   });
 
+  it("accepts rendered LaTeX option text for single choice answers", () => {
+    const question = functionDomainSeed.questions.find((item) => item.id === "q-diagnostic-2");
+    expect(question).toBeDefined();
+    expect(gradeAnswer(question!, "$x\\ge 1$").isCorrect).toBe(true);
+  });
+
   it("accepts equivalent fill blank answers", () => {
     const question = functionDomainSeed.questions.find((item) => item.id === "q-diagnostic-3");
     expect(question).toBeDefined();
