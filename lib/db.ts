@@ -124,7 +124,8 @@ export function createAppDatabase(dbPath = getDefaultDbPath()) {
     completeReviewTask: (taskId: number) => {
       sqlite.prepare("UPDATE review_tasks SET status = 'completed' WHERE id = ?").run(taskId);
     },
-    recordFeynmanOutput: (input: FeynmanInput) => recordFeynmanOutput(sqlite, input)
+    recordFeynmanOutput: (input: FeynmanInput) => recordFeynmanOutput(sqlite, input),
+    resetUserProgress: (userId: string) => resetUserProgress(sqlite, userId)
   };
 }
 
@@ -268,4 +269,17 @@ function recordFeynmanOutput(sqlite: DatabaseSync, input: FeynmanInput) {
     .run(input.userId, input.knowledgePointId, input.prompt, input.userText, input.aiFeedback, input.score, createdAt);
 
   return { id: Number(result.lastInsertRowid), createdAt };
+}
+
+function resetUserProgress(sqlite: DatabaseSync, userId: string) {
+  sqlite.exec("BEGIN");
+  try {
+    sqlite.prepare("DELETE FROM attempts WHERE user_id = ?").run(userId);
+    sqlite.prepare("DELETE FROM review_tasks WHERE user_id = ?").run(userId);
+    sqlite.prepare("DELETE FROM feynman_outputs WHERE user_id = ?").run(userId);
+    sqlite.exec("COMMIT");
+  } catch (error) {
+    sqlite.exec("ROLLBACK");
+    throw error;
+  }
 }

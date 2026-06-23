@@ -1,3 +1,4 @@
+import { ResetProgressButton } from "@/components/reset-progress-button";
 import type { LessonSeed } from "@/lib/types";
 
 export function ProgressSidebar({
@@ -44,6 +45,9 @@ export function ProgressSidebar({
           </a>
         ))}
       </nav>
+      <div className="sidebarActions">
+        <ResetProgressButton />
+      </div>
     </aside>
   );
 }

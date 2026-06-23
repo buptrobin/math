@@ -81,3 +81,13 @@ export async function completeReviewTaskAction(taskId: number) {
   }
   revalidatePath("/");
 }
+
+export async function resetProgressAction() {
+  const db = createAppDatabase();
+  try {
+    db.resetUserProgress(demoUserId);
+  } finally {
+    db.close();
+  }
+  revalidatePath("/");
+}

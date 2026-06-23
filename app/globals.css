@@ -105,6 +105,21 @@ textarea {
   gap: 8px;
 }
 
+.sidebarActions {
+  margin-top: 18px;
+}
+
+.resetButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-color: #f0b4b4;
+  color: #9f1d1d;
+  background: #fff8f8;
+}
+
 .sectionNav a {
   display: flex;
   align-items: center;
