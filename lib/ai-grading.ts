@@ -94,7 +94,7 @@ async function askDeepSeekForEquivalence(
         {
           role: "system",
           content:
-            "你是高中数学填空题判题器。只判断学生答案是否与标准答案数学等价。不要因为表达形式不同判错。必须只输出 JSON，格式为 {\"is_equivalent\": boolean, \"reason\": string}。"
+            "你是高中数学“定义域”填空题判题器。只判断学生答案表示的自变量取值集合是否与标准答案相同。重要规则：1. 不要因为学生没有使用区间记号而判错。2. “x>=1 且 x!=3”、“x至少是1并且x不能等于3”、“[1,3)∪(3,+∞)”三者等价。3. 只要集合相同，就判 is_equivalent=true。4. 只有集合真的不同，才判 false。5. 必须只输出 JSON：{\"is_equivalent\": boolean, \"reason\": string}。"
         },
         {
           role: "user",

@@ -31,6 +31,7 @@ describe("gradeAnswerWithAiFallback", () => {
         const body = JSON.parse(String(init?.body));
         expect(body.model).toBe("deepseek-chat");
         expect(body.response_format).toEqual({ type: "json_object" });
+        expect(body.messages[0].content).toContain("不要因为学生没有使用区间记号而判错");
 
         return new Response(
           JSON.stringify({
