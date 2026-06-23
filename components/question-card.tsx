@@ -5,6 +5,7 @@ import { Lightbulb, Send } from "lucide-react";
 import { saveErrorTagAction, submitAnswerAction } from "@/app/actions";
 import { ErrorTagPicker } from "@/components/error-tag-picker";
 import { MathText } from "@/components/math-text";
+import { getChoiceLabel } from "@/lib/choice-label";
 import type { ErrorTag, QuestionSeed } from "@/lib/types";
 
 export function QuestionCard({ question }: { question: QuestionSeed }) {
@@ -53,11 +54,14 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
       )}
       {question.options?.length ? (
         <div className="optionList">
-          {question.options.map((option, index) => (
-            <button key={option} type="button" className={answer === option ? "option activeOption" : "option"} onClick={() => setAnswer(option)}>
-              <strong>{String.fromCharCode(65 + index)}.</strong> <MathText>{option}</MathText>
-            </button>
-          ))}
+          {question.options.map((option, index) => {
+            const label = getChoiceLabel(index);
+            return (
+              <button key={option} type="button" className={answer === label ? "option activeOption" : "option"} onClick={() => setAnswer(label)}>
+                <strong>{label}.</strong> <MathText>{option}</MathText>
+              </button>
+            );
+          })}
         </div>
       ) : question.questionType === "short_answer" ? (
         <textarea value={answer} onChange={(event) => setAnswer(event.target.value)} placeholder="请用自己的话写出来" rows={5} />
