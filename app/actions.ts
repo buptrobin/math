@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { functionDomainSeed } from "@/data/function-domain.seed";
 import { evaluateFeynmanOutput } from "@/lib/ai-coach";
+import { gradeAnswerWithAiFallback } from "@/lib/ai-grading";
 import { createAppDatabase } from "@/lib/db";
-import { gradeAnswer } from "@/lib/grading";
 import type { ErrorTag } from "@/lib/types";
 
 const demoUserId = "demo-student";
@@ -19,7 +19,7 @@ export async function submitAnswerAction(input: {
     throw new Error(`Unknown question: ${input.questionId}`);
   }
 
-  const grade = gradeAnswer(question, input.userAnswer);
+  const grade = await gradeAnswerWithAiFallback(question, input.userAnswer);
   const db = createAppDatabase();
   try {
     db.recordAttempt({
@@ -38,7 +38,9 @@ export async function submitAnswerAction(input: {
   return {
     isCorrect: grade.isCorrect,
     explanation: question.explanation,
-    commonMistake: question.commonMistake
+    commonMistake: question.commonMistake,
+    gradingSource: grade.source,
+    aiReason: grade.aiReason
   };
 }
 

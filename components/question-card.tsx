@@ -12,7 +12,7 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
   const [hintsUsed, setHintsUsed] = useState(0);
   const [selectedErrorTag, setSelectedErrorTag] = useState<ErrorTag | undefined>();
   const [errorTagSaved, setErrorTagSaved] = useState(false);
-  const [result, setResult] = useState<{ isCorrect: boolean; explanation: string; commonMistake: string } | null>(null);
+  const [result, setResult] = useState<{ isCorrect: boolean; explanation: string; commonMistake: string; gradingSource?: string; aiReason?: string } | null>(null);
   const [isPending, startTransition] = useTransition();
   const needsErrorTag = result?.isCorrect === false && !errorTagSaved;
   const canSubmit = answer.trim().length > 0;
@@ -96,6 +96,7 @@ export function QuestionCard({ question }: { question: QuestionSeed }) {
           <p>
             <MathText>{result.explanation}</MathText>
           </p>
+          {result.gradingSource === "ai" && result.aiReason && <p>AI 兜底判断：{result.aiReason}</p>}
           {!result.isCorrect && (
             <p>
               易错点：<MathText>{result.commonMistake}</MathText>
