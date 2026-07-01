@@ -27,6 +27,10 @@ exports.main = async (event) => {
       return await grade(event);
     }
 
+    if (event.mode === "health") {
+      return health();
+    }
+
     if (event.mode === "feynman") {
       return await feynman(event);
     }
@@ -36,6 +40,16 @@ exports.main = async (event) => {
     return { ok: false, error: error instanceof Error ? error.message : "AI 请求失败。" };
   }
 };
+
+function health() {
+  return {
+    ok: true,
+    mode: "health",
+    hasDeepSeekApiKey: Boolean(process.env.DEEPSEEK_API_KEY),
+    model: process.env.DEEPSEEK_MODEL || "deepseek-chat",
+    endpoint: process.env.DEEPSEEK_API_ENDPOINT || "https://api.deepseek.com/chat/completions"
+  };
+}
 
 async function grade(event) {
   if (typeof event.questionId !== "string" || typeof event.userAnswer !== "string") {

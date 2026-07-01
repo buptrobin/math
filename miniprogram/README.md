@@ -14,6 +14,30 @@
 3. 可选配置 `DEEPSEEK_MODEL` 和 `DEEPSEEK_API_ENDPOINT`。
 4. 前端不会保存或提交 API Key。
 
+## 云函数自检
+
+部署 `aiCoach` 后，先在云函数测试里使用下面的参数确认云函数本身能被调用：
+
+```json
+{
+  "mode": "health"
+}
+```
+
+成功时应返回：
+
+```json
+{
+  "ok": true,
+  "mode": "health",
+  "hasDeepSeekApiKey": true,
+  "model": "deepseek-chat",
+  "endpoint": "https://api.deepseek.com/chat/completions"
+}
+```
+
+如果 `hasDeepSeekApiKey` 是 `false`，说明 `DEEPSEEK_API_KEY` 没有配置到当前云环境的 `aiCoach` 函数上。
+
 ## 验证清单
 
 - 首页能看到课程环节。
