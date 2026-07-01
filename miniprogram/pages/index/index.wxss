@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   gap: 14rpx;
-  margin: 0 -28rpx;
+  margin: 0 -36rpx;
 }
 
 .lessonButton {
@@ -64,9 +64,9 @@
   font-size: 30rpx;
   font-weight: 700;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.25;
 }
 
 .footerActions {
