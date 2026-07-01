@@ -1,4 +1,5 @@
 const cloud = require("wx-server-sdk");
+const https = require("https");
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
@@ -119,23 +120,55 @@ async function callDeepSeek(messages) {
 
   const endpoint = process.env.DEEPSEEK_API_ENDPOINT || "https://api.deepseek.com/chat/completions";
   const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
-  const response = await fetch(endpoint, {
-    method: "POST",
+  const payload = await postJson(endpoint, {
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`
     },
-    body: JSON.stringify({ model, response_format: { type: "json_object" }, temperature: 0, stream: false, messages })
+    body: { model, response_format: { type: "json_object" }, temperature: 0, stream: false, messages }
   });
-
-  if (!response.ok) {
-    throw new Error(`AI 请求失败：${response.status}`);
-  }
-
-  const payload = await response.json();
   const content = payload && payload.choices && payload.choices[0] && payload.choices[0].message && payload.choices[0].message.content;
   if (!content) {
     throw new Error("AI 没有返回内容。");
   }
   return JSON.parse(content);
+}
+
+function postJson(endpoint, input) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(endpoint);
+    const body = JSON.stringify(input.body);
+    const request = https.request(
+      {
+        method: "POST",
+        hostname: url.hostname,
+        path: `${url.pathname}${url.search}`,
+        port: url.port || 443,
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(body),
+          ...input.headers
+        }
+      },
+      (response) => {
+        const chunks = [];
+        response.on("data", (chunk) => chunks.push(chunk));
+        response.on("end", () => {
+          const text = Buffer.concat(chunks).toString("utf8");
+          if (!response.statusCode || response.statusCode < 200 || response.statusCode >= 300) {
+            reject(new Error(`AI 请求失败：${response.statusCode}`));
+            return;
+          }
+          try {
+            resolve(JSON.parse(text));
+          } catch {
+            reject(new Error("AI 返回了无法解析的 JSON。"));
+          }
+        });
+      }
+    );
+
+    request.on("error", reject);
+    request.write(body);
+    request.end();
+  });
 }
