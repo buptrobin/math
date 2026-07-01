@@ -3,6 +3,7 @@ import { functionDomainSeed } from "../miniprogram/shared/data/function-domain.s
 import { gradeAnswer, normalizeAnswer } from "../miniprogram/shared/lib/grading";
 import { createReviewSchedule } from "../miniprogram/shared/lib/review-schedule";
 import { formatMathText } from "../miniprogram/shared/lib/math-text";
+import { renderMathNodes } from "../miniprogram/shared/lib/math-render";
 
 describe("mini program shared grading", () => {
   it("normalizes equivalent interval and inequality answers", () => {
@@ -40,5 +41,15 @@ describe("mini program math text fallback", () => {
   it("formats square roots inside fractions without leaving latex commands", () => {
     expect(formatMathText("$y=\\frac{\\sqrt{x-1}}{x-3}$")).toBe("y=√(x-1)/(x-3)");
     expect(formatMathText("$y=\\frac{1}{\\sqrt{x-2}}$")).toBe("y=1/(√(x-2))");
+  });
+});
+
+describe("mini program rich math rendering", () => {
+  it("renders latex formulas into rich-text nodes", () => {
+    const nodes = renderMathNodes("求 $y=\\frac{\\sqrt{x-1}}{x-3}$ 的定义域");
+
+    expect(Array.isArray(nodes)).toBe(true);
+    expect(JSON.stringify(nodes)).toContain("katex");
+    expect(JSON.stringify(nodes)).toContain("sqrt");
   });
 });

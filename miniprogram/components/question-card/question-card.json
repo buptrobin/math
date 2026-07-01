@@ -1,3 +1,6 @@
 {
-  "component": true
+  "component": true,
+  "usingComponents": {
+    "math-rich-text": "../math-rich-text/math-rich-text"
+  }
 }

@@ -1,5 +1,3 @@
-import { formatMathText } from "../../shared/lib/math-text";
-
 Component({
   properties: {
     question: { type: Object, value: null },
@@ -8,24 +6,21 @@ Component({
   data: {
     answer: "",
     selectedChoiceLabel: "",
-    displayOptions: [] as Array<{ label: string; value: string; text: string }>,
-    visibleHints: [] as string[],
-    displayQuestionText: ""
+    displayOptions: [] as Array<{ label: string; value: string }>,
+    visibleHints: [] as string[]
   },
   observers: {
     question(this: any, question: { questionText: string; options?: string[] } | null) {
       const displayOptions =
         question?.options?.map((option, index) => ({
           label: String.fromCharCode(65 + index),
-          value: option,
-          text: formatMathText(option)
+          value: option
         })) ?? [];
       this.setData({
         answer: "",
         selectedChoiceLabel: "",
         displayOptions,
-        visibleHints: [],
-        displayQuestionText: question ? formatMathText(question.questionText) : ""
+        visibleHints: []
       });
     }
   },
@@ -42,7 +37,7 @@ Component({
     showHint(this: any) {
       const question = this.properties.question as { hints?: string[] } | null;
       const hints = question?.hints ?? [];
-      const next = hints.slice(0, this.data.visibleHints.length + 1).map(formatMathText);
+      const next = hints.slice(0, this.data.visibleHints.length + 1);
       this.setData({ visibleHints: next });
     },
     submit(this: any) {

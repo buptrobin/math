@@ -13,6 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rojer/katex-mini": "^1.3.4",
     "katex": "^0.17.0",
     "lucide-react": "latest",
     "next": "latest",

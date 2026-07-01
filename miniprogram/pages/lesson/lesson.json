@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "课程练习",
   "usingComponents": {
+    "math-rich-text": "../../components/math-rich-text/math-rich-text",
     "question-card": "../../components/question-card/question-card"
   }
 }

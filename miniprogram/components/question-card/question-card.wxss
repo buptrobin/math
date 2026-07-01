@@ -29,8 +29,19 @@
 }
 
 .option {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
   text-align: left;
   background: #f8faf9;
+}
+
+.optionLabel {
+  flex: 0 0 auto;
+}
+
+.optionText {
+  flex: 1;
 }
 
 .selected {

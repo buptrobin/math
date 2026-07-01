@@ -1,0 +1,4 @@
+.mathRichText {
+  line-height: 1.6;
+  word-break: break-word;
+}

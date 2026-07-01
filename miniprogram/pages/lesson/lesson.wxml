@@ -6,10 +6,12 @@
 
   <view wx:if="{{isTextbook}}" class="textBlock">
     <text class="blockTitle">课本说法</text>
-    <text>{{textbookFormal}}</text>
+    <math-rich-text content="{{textbookFormal}}" />
     <text class="blockTitle">孩子版解释</text>
-    <text>{{textbookFriendly}}</text>
-    <text wx:for="{{ruleCards}}" wx:key="*this" class="rule">{{item}}</text>
+    <math-rich-text content="{{textbookFriendly}}" />
+    <view wx:for="{{ruleCards}}" wx:key="*this" class="rule">
+      <math-rich-text content="{{item}}" />
+    </view>
   </view>
 
   <view wx:if="{{isFeynman}}" class="feynmanList">

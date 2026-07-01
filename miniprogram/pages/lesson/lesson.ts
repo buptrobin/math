@@ -1,7 +1,6 @@
 import { functionDomainSeed } from "../../shared/data/function-domain.seed";
 import { createAiClient } from "../../shared/lib/ai-client";
 import { gradeAnswer } from "../../shared/lib/grading";
-import { formatMathText } from "../../shared/lib/math-text";
 import { createMiniStorageRepository, createWxStorageAdapter } from "../../shared/lib/storage";
 
 Page({
@@ -26,9 +25,9 @@ Page({
       questions: functionDomainSeed.questions.filter((item) => item.lessonId === lesson.id),
       isTextbook: lesson.sectionType === "textbook_explanation",
       isFeynman: lesson.sectionType === "feynman_output",
-      textbookFormal: formatMathText(functionDomainSeed.textbookExplanation.formal),
-      textbookFriendly: formatMathText(functionDomainSeed.textbookExplanation.studentFriendly),
-      ruleCards: functionDomainSeed.textbookExplanation.ruleCards.map(formatMathText)
+      textbookFormal: functionDomainSeed.textbookExplanation.formal,
+      textbookFriendly: functionDomainSeed.textbookExplanation.studentFriendly,
+      ruleCards: functionDomainSeed.textbookExplanation.ruleCards
     });
   },
   async submitAnswer(this: any, event: WechatMiniprogram.CustomEvent<{ questionId: string; userAnswer: string; hintsUsed: number }>) {
@@ -62,7 +61,7 @@ Page({
     this.setData({
       [`results.${questionId}`]: {
         isCorrect,
-        explanation: formatMathText(question.explanation),
+        explanation: question.explanation,
         commonMistake: question.commonMistake,
         aiReason
       }

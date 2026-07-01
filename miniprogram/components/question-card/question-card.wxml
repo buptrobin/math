@@ -3,7 +3,7 @@
     <text>难度 {{question.difficulty}}</text>
     <text>{{question.examPoint}}</text>
   </view>
-  <text class="question">{{displayQuestionText}}</text>
+  <math-rich-text class="question" content="{{question.questionText}}" />
 
   <view wx:if="{{displayOptions.length}}" class="options">
     <button
@@ -13,7 +13,10 @@
       data-answer="{{item.value}}"
       data-label="{{item.label}}"
       bindtap="selectOption"
-    >{{item.label}}. {{item.text}}</button>
+    >
+      <text class="optionLabel">{{item.label}}.</text>
+      <math-rich-text class="optionText" content="{{item.value}}" />
+    </button>
   </view>
 
   <input
@@ -25,7 +28,7 @@
   />
 
   <view class="hints" wx:if="{{visibleHints.length}}">
-    <text wx:for="{{visibleHints}}" wx:key="*this" class="hint">{{item}}</text>
+    <math-rich-text wx:for="{{visibleHints}}" wx:key="*this" class="hint" content="{{item}}" />
   </view>
 
   <view class="actions">
@@ -35,7 +38,7 @@
 
   <view wx:if="{{result}}" class="result {{result.isCorrect ? 'correct' : 'wrong'}}">
     <text>{{result.isCorrect ? '回答正确' : '再想一想'}}</text>
-    <text>{{result.explanation}}</text>
+    <math-rich-text content="{{result.explanation}}" />
     <text wx:if="{{result.commonMistake}}">常见错误：{{result.commonMistake}}</text>
     <text wx:if="{{result.aiReason}}">AI 判断：{{result.aiReason}}</text>
   </view>
