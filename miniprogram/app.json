@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/lesson/lesson",
+    "pages/review/review"
+  ],
+  "window": {
+    "navigationBarTitleText": "函数定义域教练",
+    "navigationBarBackgroundColor": "#1f4f46",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f6f2ea"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

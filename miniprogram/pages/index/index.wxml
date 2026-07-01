@@ -1,0 +1,7 @@
+<view class="page indexPage">
+  <view class="hero">
+    <text class="eyebrow">函数基础</text>
+    <text class="title">函数定义域教练</text>
+    <text class="subtitle">先诊断，再练习，再复习。</text>
+  </view>
+</view>

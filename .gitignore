@@ -5,3 +5,5 @@ node_modules/
 .data/
 tsconfig.tsbuildinfo
 .env.local
+miniprogram/project.private.config.json
+miniprogram/miniprogram_npm/
