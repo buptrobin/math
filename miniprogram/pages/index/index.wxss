@@ -52,7 +52,7 @@
 }
 
 .lessonOrder {
-  flex: 0 0 150rpx;
+  flex: 0 0 180rpx;
   white-space: nowrap;
   font-size: 30rpx;
   font-weight: 700;
