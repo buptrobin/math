@@ -1,36 +1,36 @@
-# WeChat Mini Program Local Storage + AI MVP Design
+# 微信小程序本地存储 + AI MVP 设计
 
-## Goal
+## 目标
 
-Build a WeChat Mini Program MVP for the existing function-domain coach. The mini program should run as a native mini program, store student progress locally on the device, and call a cloud function for AI-powered answer equivalence checks and Feynman-style feedback.
+为现有“函数定义域教练”构建一个微信小程序 MVP。小程序应以原生小程序方式运行，学生进度先保存在本机，并通过云函数调用 AI，完成答案等价性判定和费曼输出反馈。
 
-The existing Next.js web app remains intact. The mini program is added under a separate `miniprogram/` directory so both surfaces can coexist.
+现有 Next.js Web 应用保持不变。小程序新增在独立的 `miniprogram/` 目录下，让 Web 版和小程序版可以并存。
 
-## Non-Goals
+## 非目标
 
-- No multi-user cloud sync in the first mini program MVP.
-- No migration away from the existing Next.js app.
-- No AI API key in mini program frontend code.
-- No full content management backend.
-- No broad subject expansion beyond the current function-domain lesson seed.
+- 第一版不做多设备云同步。
+- 不迁移或替换现有 Next.js 应用。
+- 小程序前端不包含任何 AI API Key。
+- 不建设完整内容管理后台。
+- 不扩展到当前“函数定义域”种子内容以外的知识点。
 
-## Architecture
+## 架构
 
-The project will contain two runnable surfaces:
+项目会包含两个可运行入口：
 
-- Existing web app: current Next.js app, SQLite persistence, and server actions.
-- New mini program: native WeChat Mini Program files under `miniprogram/`, local storage persistence, and one cloud function for AI.
+- 现有 Web 应用：继续使用当前 Next.js、SQLite 持久化和 Server Actions。
+- 新增小程序：原生微信小程序文件位于 `miniprogram/`，进度使用本地存储，AI 通过一个云函数代理。
 
-The mini program reuses the stable, data-driven core where practical:
+小程序尽量复用稳定的数据和纯逻辑：
 
-- `functionDomainSeed` for lessons, questions, explanations, hints, and Feynman prompts.
-- `QuestionSeed`, `LessonSeed`, `SectionType`, and related TypeScript types.
-- Deterministic answer normalization and grading before AI fallback.
-- Progress derivation and review scheduling logic, adapted to mini program storage records.
+- `functionDomainSeed`：课程、题目、解释、提示和费曼提示。
+- `QuestionSeed`、`LessonSeed`、`SectionType` 等 TypeScript 类型。
+- 本地确定性答案归一化和判题逻辑。
+- 进度派生和复习计划逻辑，并适配小程序本地存储记录。
 
-React components, Next.js server actions, and SQLite database code are not reused directly because they depend on browser/server runtimes that do not exist inside a native mini program.
+React 组件、Next.js Server Actions 和 SQLite 数据库代码不直接复用，因为它们依赖原生小程序中不存在的浏览器或 Node 服务端运行时。
 
-## Directory Layout
+## 目录结构
 
 ```text
 miniprogram/
@@ -80,60 +80,60 @@ miniprogram/
       package.json
 ```
 
-This layout keeps mini program-specific build assumptions away from the Next.js source tree.
+这个结构把小程序构建假设隔离在 `miniprogram/` 内，不影响 Next.js 源码树。
 
-## Product Scope
+## 产品范围
 
-The MVP starts on a learning dashboard that shows the current knowledge point, progress summary, and lesson list. Students can enter each lesson and answer the questions in that lesson.
+MVP 从学习首页开始，展示当前知识点、进度摘要和课程环节列表。学生可以进入每个环节，完成该环节内的题目。
 
-Lesson sections:
+课程环节：
 
-- Diagnostic
-- Socratic prompts
-- Textbook explanation
-- Example breakdown
-- Variation practice
-- Gaokao challenge
-- Feynman output
-- Review
+- 前置诊断
+- 概念追问
+- 课本概念精读
+- 课本例题拆解
+- 变式练习
+- 高考综合挑战
+- 费曼输出
+- 错题复习
 
-Question interactions:
+题目交互：
 
-- Single-choice questions use option buttons.
-- Fill-blank and example questions use text input.
-- Students can reveal hints one at a time.
-- On submit, the mini program runs deterministic grading first.
-- If deterministic grading says wrong and the question is fill-blank or example type, the mini program calls the AI cloud function for equivalence checking.
-- The result shows correctness, explanation, common mistake, and whether grading came from local rules or AI.
+- 单选题使用选项按钮。
+- 填空题和例题使用文本输入。
+- 学生可以逐条查看提示。
+- 提交后，小程序先执行本地确定性判题。
+- 如果本地判题认为错误，且题型是填空题或例题，小程序调用 AI 云函数做等价性判定。
+- 结果展示正误、解析、常见错误，以及判题来源是本地规则还是 AI。
 
-Feynman output:
+费曼输出：
 
-- Students type an explanation for each Feynman prompt.
-- The mini program calls the same cloud function with `mode: "feynman"`.
-- The response returns a score and short actionable feedback.
+- 学生针对每个费曼提示输入自己的解释。
+- 小程序以 `mode: "feynman"` 调用同一个云函数。
+- 云函数返回分数和简短可执行反馈。
 
-Review:
+错题复习：
 
-- Wrong attempts create local review tasks.
-- The review page lists due tasks from local storage.
-- Completing a review marks the task complete locally.
+- 错误作答会创建本地复习任务。
+- 复习页从本地存储读取到期任务。
+- 完成复习后，本地标记任务为已完成。
 
-Reset:
+重置：
 
-- The dashboard exposes a reset action that clears local progress, attempts, review tasks, and AI feedback.
+- 首页提供重置入口，清空本地进度、答题记录、复习任务和 AI 反馈。
 
-## Local Storage Model
+## 本地存储模型
 
-Mini program progress is local-only in the MVP.
+MVP 中学生进度只保存在本机。
 
-Storage keys:
+存储键：
 
 - `mathCoachAttempts`
 - `mathCoachReviewTasks`
 - `mathCoachFeynmanOutputs`
 - `mathCoachUiState`
 
-Attempt record:
+答题记录：
 
 ```ts
 interface MiniAttempt {
@@ -149,7 +149,7 @@ interface MiniAttempt {
 }
 ```
 
-Review task record:
+复习任务记录：
 
 ```ts
 interface MiniReviewTask {
@@ -161,7 +161,7 @@ interface MiniReviewTask {
 }
 ```
 
-Feynman output record:
+费曼输出记录：
 
 ```ts
 interface MiniFeynmanOutput {
@@ -175,11 +175,11 @@ interface MiniFeynmanOutput {
 }
 ```
 
-## AI Cloud Function
+## AI 云函数
 
-The mini program calls one cloud function named `aiCoach`.
+小程序调用一个名为 `aiCoach` 的云函数。
 
-Request shape:
+请求结构：
 
 ```ts
 type AiCoachRequest =
@@ -195,7 +195,7 @@ type AiCoachRequest =
     };
 ```
 
-Grade response:
+判题响应：
 
 ```ts
 interface AiGradeResponse {
@@ -206,7 +206,7 @@ interface AiGradeResponse {
 }
 ```
 
-Feynman response:
+费曼反馈响应：
 
 ```ts
 interface AiFeynmanResponse {
@@ -217,7 +217,7 @@ interface AiFeynmanResponse {
 }
 ```
 
-Error response:
+错误响应：
 
 ```ts
 interface AiErrorResponse {
@@ -226,53 +226,53 @@ interface AiErrorResponse {
 }
 ```
 
-Cloud function environment variables:
+云函数环境变量：
 
 - `DEEPSEEK_API_KEY`
-- `DEEPSEEK_MODEL`, default `deepseek-chat`
-- `DEEPSEEK_API_ENDPOINT`, default `https://api.deepseek.com/chat/completions`
+- `DEEPSEEK_MODEL`，默认 `deepseek-chat`
+- `DEEPSEEK_API_ENDPOINT`，默认 `https://api.deepseek.com/chat/completions`
 
-The cloud function validates input, looks up questions from the seed data for grading requests, sends a constrained JSON-output prompt to DeepSeek, parses the result, and returns a small structured response. If DeepSeek fails or returns invalid JSON, the function returns `ok: false` without exposing the API key or raw provider payload.
+云函数负责校验输入。判题请求会从种子数据中查找题目，构造约束为 JSON 输出的 DeepSeek 提示词，解析结果后返回小型结构化响应。如果 DeepSeek 请求失败或返回非法 JSON，云函数返回 `ok: false`，不暴露 API Key 或原始供应商响应。
 
-## AI Safety Boundary
+## AI 安全边界
 
-The mini program frontend never contains the DeepSeek API key. All AI requests go through the cloud function.
+小程序前端永远不包含 DeepSeek API Key。所有 AI 请求都通过云函数。
 
-For grading, AI is only a fallback after deterministic grading fails. The prompt asks the model to judge set equivalence for function-domain answers, not to solve unrelated math or provide open-ended tutoring.
+判题场景中，AI 只作为本地确定性判题失败后的兜底。提示词要求模型只判断函数定义域答案表示的集合是否等价，不做无关数学求解，也不做开放式辅导。
 
-For Feynman feedback, the model gives short coaching feedback and a score. It should not introduce new curriculum beyond the current function-domain concept.
+费曼反馈场景中，模型只返回简短学习反馈和分数，不引入当前函数定义域概念之外的新课程内容。
 
-## Formula Rendering
+## 公式渲染
 
-The MVP uses mini program-friendly text rendering rather than trying to port KaTeX. Seed strings may keep readable notation such as `√(x-1)`, `x ≥ 1`, intervals, and union symbols. If a raw LaTeX fragment is present, the mini program should display a readable fallback by stripping simple `$` delimiters and common escape forms.
+MVP 使用小程序友好的文本展示，不尝试移植 KaTeX。种子内容可以保留 `√(x-1)`、`x ≥ 1`、区间、并集符号等可读写法。如果存在原始 LaTeX 片段，小程序应通过去掉简单 `$` 分隔符和常见转义形式来展示可读降级文本。
 
-Rich LaTeX rendering can be added later with a mini program-compatible math component or pre-rendered formula images.
+后续可以接入小程序兼容的数学公式组件，或使用预渲染公式图片。
 
-## Testing Strategy
+## 测试策略
 
-The first implementation should preserve unit coverage for shared behavior:
+第一版实现应保留共享行为的单元测试：
 
-- Deterministic grading normalization.
-- Local storage repository operations using an in-memory storage adapter in tests.
-- Review task creation after wrong attempts.
-- AI client fallback behavior when the cloud function fails.
+- 确定性判题归一化。
+- 使用内存存储适配器测试本地存储仓库操作。
+- 错误作答后创建复习任务。
+- 云函数失败时 AI 客户端的兜底行为。
 
-Manual verification will use WeChat Developer Tools:
+手动验证使用微信开发者工具：
 
-- Launch mini program from `miniprogram/`.
-- Answer a single-choice question.
-- Answer a fill-blank question with a locally accepted equivalent answer.
-- Answer a fill-blank question that requires AI equivalence.
-- Submit a Feynman explanation.
-- Confirm progress survives app restart.
-- Reset progress and confirm local state is cleared.
+- 从 `miniprogram/` 启动小程序。
+- 完成一道单选题。
+- 提交一个本地规则可接受的填空等价答案。
+- 提交一个需要 AI 等价性判定的填空答案。
+- 提交一段费曼解释。
+- 确认重启后进度仍保留。
+- 重置进度并确认本地状态清空。
 
-## Acceptance Criteria
+## 验收标准
 
-- The existing Next.js app still builds and tests as before.
-- A native mini program project exists under `miniprogram/`.
-- The dashboard, lesson view, review view, local progress, and reset flow work without cloud configuration.
-- Deterministic grading works offline.
-- Fill-blank AI fallback and Feynman feedback call the `aiCoach` cloud function when configured.
-- Missing or failing AI configuration does not block normal local learning flows.
-- No AI secret is committed or referenced in frontend code.
+- 现有 Next.js 应用仍可按原方式构建和测试。
+- `miniprogram/` 下存在原生小程序项目。
+- 首页、课程页、复习页、本地进度和重置流程在没有云配置时也可使用。
+- 确定性判题可离线工作。
+- 配置云函数后，填空题 AI 兜底和费曼反馈会调用 `aiCoach`。
+- AI 配置缺失或调用失败不会阻塞普通本地学习流程。
+- 不提交任何 AI 密钥，也不在前端代码中引用密钥。
