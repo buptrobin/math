@@ -2,3 +2,18 @@
   line-height: 1.6;
   word-break: break-word;
 }
+
+.mathText,
+.mathInline {
+  display: inline;
+  vertical-align: middle;
+}
+
+.mathScroll {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 10rpx 0;
+  overflow: hidden;
+  white-space: nowrap;
+}

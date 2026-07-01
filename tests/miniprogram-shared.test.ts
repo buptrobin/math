@@ -3,7 +3,7 @@ import { functionDomainSeed } from "../miniprogram/shared/data/function-domain.s
 import { gradeAnswer, normalizeAnswer } from "../miniprogram/shared/lib/grading";
 import { createReviewSchedule } from "../miniprogram/shared/lib/review-schedule";
 import { formatMathText } from "../miniprogram/shared/lib/math-text";
-import { renderMathNodes } from "../miniprogram/shared/lib/math-render";
+import { renderMathNodes, renderMathSegments } from "../miniprogram/shared/lib/math-render";
 
 describe("mini program shared grading", () => {
   it("normalizes equivalent interval and inequality answers", () => {
@@ -51,5 +51,15 @@ describe("mini program rich math rendering", () => {
     expect(Array.isArray(nodes)).toBe(true);
     expect(JSON.stringify(nodes)).toContain("katex");
     expect(JSON.stringify(nodes)).toContain("sqrt");
+  });
+
+  it("splits complex formulas into scrollable math segments", () => {
+    const segments = renderMathSegments("综合挑战：求函数 $y=\\frac{\\sqrt{x+1}}{\\sqrt{2-x}}+\\frac{1}{x^2-1}$ 的定义域。");
+
+    expect(segments).toHaveLength(3);
+    expect(segments[0]).toMatchObject({ type: "text", text: "综合挑战：求函数 " });
+    expect(segments[1]).toMatchObject({ type: "math", block: true });
+    expect(JSON.stringify(segments[1])).toContain("sqrt");
+    expect(segments[2]).toMatchObject({ type: "text", text: " 的定义域。" });
   });
 });

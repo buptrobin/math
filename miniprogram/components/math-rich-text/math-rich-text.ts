@@ -1,15 +1,15 @@
-import { renderMathNodes } from "../../shared/lib/math-render";
+import { renderMathSegments } from "../../shared/lib/math-render";
 
 Component({
   properties: {
     content: { type: String, value: "" }
   },
   data: {
-    nodes: [] as unknown[]
+    segments: [] as unknown[]
   },
   observers: {
     content(this: any, content: string) {
-      this.setData({ nodes: renderMathNodes(content || "") });
+      this.setData({ segments: renderMathSegments(content || "") });
     }
   }
 });
