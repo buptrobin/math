@@ -1,5 +1,4 @@
 import parseLatex, { renderMathInText } from "@rojer/katex-mini";
-import { formatMathText } from "./math-text";
 
 const delimiters = [
   { left: "$$", right: "$$", display: true },
@@ -58,10 +57,6 @@ export function renderMathSegments(content: string): MathSegment[] {
 }
 
 function renderLatexNodes(latex: string, displayMode: boolean) {
-  if (latex.includes("\\sqrt")) {
-    return [{ type: "text", text: formatMathText(`$${latex}$`) }];
-  }
-
   try {
     return parseLatex(latex, { displayMode, throwError: false });
   } catch {

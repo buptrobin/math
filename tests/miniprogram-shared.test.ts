@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { functionDomainSeed } from "../miniprogram/shared/data/function-domain.seed";
 import { gradeAnswer, normalizeAnswer } from "../miniprogram/shared/lib/grading";
@@ -59,17 +60,25 @@ describe("mini program rich math rendering", () => {
     expect(segments).toHaveLength(3);
     expect(segments[0]).toMatchObject({ type: "text", text: "综合挑战：求函数 " });
     expect(segments[1]).toMatchObject({ type: "math", block: true });
-    expect(JSON.stringify(segments[1])).toContain("√(x+1)");
-    expect(JSON.stringify(segments[1])).not.toContain("katex");
+    expect(JSON.stringify(segments[1])).toContain("katex");
+    expect(JSON.stringify(segments[1])).toContain("sqrt");
     expect(segments[2]).toMatchObject({ type: "text", text: " 的定义域。" });
   });
 
-  it("keeps simple square-root formulas readable without katex sqrt layout", () => {
+  it("keeps simple square-root formulas on the katex rendering path", () => {
     const segments = renderMathSegments("A层：求 $y=\\sqrt{x+3}$ 的定义域。");
 
     expect(segments).toHaveLength(3);
     expect(segments[1]).toMatchObject({ type: "math", block: false });
-    expect(JSON.stringify(segments[1])).toContain("y=√(x+3)");
-    expect(JSON.stringify(segments[1])).not.toContain("sqrt");
+    expect(JSON.stringify(segments[1])).toContain("katex");
+    expect(JSON.stringify(segments[1])).toContain("sqrt");
+  });
+
+  it("loads katex styles inside the mini program math component", () => {
+    const json = JSON.parse(readFileSync("miniprogram/components/math-rich-text/math-rich-text.json", "utf8"));
+    const wxss = readFileSync("miniprogram/components/math-rich-text/math-rich-text.wxss", "utf8");
+
+    expect(json.options.styleIsolation).toBe("shared");
+    expect(wxss).toContain("@rojer/katex-mini/index.wxss");
   });
 });
