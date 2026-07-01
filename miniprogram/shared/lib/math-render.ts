@@ -65,5 +65,5 @@ function renderLatexNodes(latex: string, displayMode: boolean) {
 }
 
 function isComplexFormula(latex: string) {
-  return latex.includes("\\frac") || latex.length > 24;
+  return latex.length > 24;
 }

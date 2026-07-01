@@ -74,11 +74,35 @@ describe("mini program rich math rendering", () => {
     expect(JSON.stringify(segments[1])).toContain("sqrt");
   });
 
+  it("keeps short fraction formulas inline with following text", () => {
+    const segments = renderMathSegments("$y=\\frac{1}{x-2}$，$x$ 可以等于 $2$ 吗？");
+
+    expect(segments).toHaveLength(6);
+    expect(segments[0]).toMatchObject({ type: "math", block: false });
+    expect(segments[1]).toMatchObject({ type: "text", text: "，" });
+    expect(segments[2]).toMatchObject({ type: "math", block: false });
+    expect(segments[3]).toMatchObject({ type: "text", text: " 可以等于 " });
+    expect(segments[4]).toMatchObject({ type: "math", block: false });
+  });
+
   it("loads katex styles inside the mini program math component", () => {
     const json = JSON.parse(readFileSync("miniprogram/components/math-rich-text/math-rich-text.json", "utf8"));
     const wxss = readFileSync("miniprogram/components/math-rich-text/math-rich-text.wxss", "utf8");
 
     expect(json.options.styleIsolation).toBe("shared");
     expect(wxss).toContain("@rojer/katex-mini/index.wxss");
+    expect(wxss).toContain(":host");
+    expect(wxss).toContain("width: 100%");
+  });
+
+  it("keeps choice buttons full width with body-sized bold text", () => {
+    const wxss = readFileSync("miniprogram/components/question-card/question-card.wxss", "utf8");
+
+    expect(wxss).toContain(".option");
+    expect(wxss).toContain("width: 100%");
+    expect(wxss).toContain("font-size: 30rpx");
+    expect(wxss).toContain("font-weight: 700");
+    expect(wxss).toContain("white-space: normal");
+    expect(wxss).toContain("min-width: 0");
   });
 });

@@ -32,8 +32,21 @@
   display: flex;
   align-items: center;
   gap: 8rpx;
+  width: 100%;
+  min-height: 88rpx;
+  height: auto;
+  box-sizing: border-box;
+  padding: 18rpx 24rpx;
   text-align: left;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: normal;
   background: #f8faf9;
+}
+
+.option::after {
+  border: 0;
 }
 
 .optionLabel {
@@ -42,6 +55,7 @@
 
 .optionText {
   flex: 1;
+  min-width: 0;
 }
 
 .selected {
