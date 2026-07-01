@@ -65,24 +65,22 @@ describe("mini program rich math rendering", () => {
     expect(segments[2]).toMatchObject({ type: "text", text: " 的定义域。" });
   });
 
-  it("keeps simple square-root formulas on the katex rendering path", () => {
+  it("keeps simple square-root formulas in one inline rich text run", () => {
     const segments = renderMathSegments("A层：求 $y=\\sqrt{x+3}$ 的定义域。");
 
-    expect(segments).toHaveLength(3);
-    expect(segments[1]).toMatchObject({ type: "math", block: false });
-    expect(JSON.stringify(segments[1])).toContain("katex");
-    expect(JSON.stringify(segments[1])).toContain("sqrt");
+    expect(segments).toHaveLength(1);
+    expect(segments[0]).toMatchObject({ type: "math", block: false });
+    expect(JSON.stringify(segments[0])).toContain("katex");
+    expect(JSON.stringify(segments[0])).toContain("sqrt");
   });
 
-  it("keeps short fraction formulas inline with following text", () => {
+  it("keeps short fraction formulas and following text in one inline rich text run", () => {
     const segments = renderMathSegments("$y=\\frac{1}{x-2}$，$x$ 可以等于 $2$ 吗？");
 
-    expect(segments).toHaveLength(6);
+    expect(segments).toHaveLength(1);
     expect(segments[0]).toMatchObject({ type: "math", block: false });
-    expect(segments[1]).toMatchObject({ type: "text", text: "，" });
-    expect(segments[2]).toMatchObject({ type: "math", block: false });
-    expect(segments[3]).toMatchObject({ type: "text", text: " 可以等于 " });
-    expect(segments[4]).toMatchObject({ type: "math", block: false });
+    expect(JSON.stringify(segments[0])).toContain("katex");
+    expect(JSON.stringify(segments[0])).toContain("可以等于");
   });
 
   it("loads katex styles inside the mini program math component", () => {

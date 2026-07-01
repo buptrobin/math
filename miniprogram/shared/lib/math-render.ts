@@ -27,6 +27,22 @@ export type MathSegment =
     };
 
 export function renderMathSegments(content: string): MathSegment[] {
+  const matches = Array.from(content.matchAll(/(\$\$[^$]+\$\$|\$[^$]+\$)/g));
+  if (!matches.length) {
+    return [{ type: "text", text: content }];
+  }
+
+  const hasBlockFormula = matches.some((match) => {
+    const raw = match[0];
+    const isDisplay = raw.startsWith("$$");
+    const latex = raw.slice(isDisplay ? 2 : 1, isDisplay ? -2 : -1);
+    return isDisplay || isComplexFormula(latex);
+  });
+
+  if (!hasBlockFormula) {
+    return [{ type: "math", block: false, nodes: renderMathNodes(content) }];
+  }
+
   const segments: MathSegment[] = [];
   const pattern = /(\$\$[^$]+\$\$|\$[^$]+\$)/g;
   let lastIndex = 0;
