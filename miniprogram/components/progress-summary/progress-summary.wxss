@@ -1,0 +1,26 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx;
+  padding: 20rpx;
+  background: #ffffff;
+  border: 1rpx solid #d8e2dc;
+  border-radius: 8rpx;
+}
+
+.label,
+.value {
+  display: block;
+  text-align: center;
+}
+
+.label {
+  color: #667085;
+  font-size: 22rpx;
+}
+
+.value {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}

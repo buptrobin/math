@@ -1,0 +1,46 @@
+.lessonPage {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.sectionHeader,
+.textBlock,
+.feynmanCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 22rpx;
+  background: #ffffff;
+  border: 1rpx solid #d8e2dc;
+  border-radius: 8rpx;
+}
+
+.eyebrow {
+  color: #2f6f62;
+  font-size: 24rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.blockTitle {
+  margin-top: 8rpx;
+  font-weight: 700;
+}
+
+.rule {
+  padding: 12rpx;
+  background: #f8faf9;
+  border-radius: 6rpx;
+}
+
+textarea {
+  min-height: 150rpx;
+  padding: 14rpx;
+  background: #f8faf9;
+  border: 1rpx solid #d8e2dc;
+  border-radius: 6rpx;
+}

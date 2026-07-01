@@ -1,0 +1,31 @@
+<view class="page lessonPage">
+  <view class="sectionHeader">
+    <text class="eyebrow">第 {{lesson.orderIndex}} 环节</text>
+    <text class="title">{{lesson.title}}</text>
+  </view>
+
+  <view wx:if="{{isTextbook}}" class="textBlock">
+    <text class="blockTitle">课本说法</text>
+    <text>{{textbookFormal}}</text>
+    <text class="blockTitle">孩子版解释</text>
+    <text>{{textbookFriendly}}</text>
+    <text wx:for="{{ruleCards}}" wx:key="*this" class="rule">{{item}}</text>
+  </view>
+
+  <view wx:if="{{isFeynman}}" class="feynmanList">
+    <view wx:for="{{feynmanPrompts}}" wx:key="id" class="feynmanCard">
+      <text>{{item.prompt}}</text>
+      <textarea data-id="{{item.id}}" data-prompt="{{item.prompt}}" bindinput="onFeynmanInput" placeholder="用自己的话讲一遍" />
+      <button type="primary" size="mini" data-id="{{item.id}}" data-prompt="{{item.prompt}}" bindtap="submitFeynman">提交讲解</button>
+      <text wx:if="{{feynmanFeedback[item.id]}}">{{feynmanFeedback[item.id]}}</text>
+    </view>
+  </view>
+
+  <question-card
+    wx:for="{{questions}}"
+    wx:key="id"
+    question="{{item}}"
+    result="{{results[item.id]}}"
+    bind:submit="submitAnswer"
+  />
+</view>

@@ -1,0 +1,28 @@
+.reviewPage {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.header,
+.task,
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  padding: 22rpx;
+  background: #ffffff;
+  border: 1rpx solid #d8e2dc;
+  border-radius: 8rpx;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.subtitle,
+.stage,
+.empty {
+  color: #667085;
+}

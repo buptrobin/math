@@ -1,0 +1,6 @@
+<view class="summary">
+  <view><text class="label">状态</text><text class="value">{{status}}</text></view>
+  <view><text class="label">作答</text><text class="value">{{totalAttempts}}</text></view>
+  <view><text class="label">错题</text><text class="value">{{wrongAttempts}}</text></view>
+  <view><text class="label">待复习</text><text class="value">{{dueReviews}}</text></view>
+</view>

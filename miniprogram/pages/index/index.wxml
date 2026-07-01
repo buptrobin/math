@@ -1,7 +1,32 @@
 <view class="page indexPage">
   <view class="hero">
     <text class="eyebrow">函数基础</text>
-    <text class="title">函数定义域教练</text>
-    <text class="subtitle">先诊断，再练习，再复习。</text>
+    <text class="title">{{knowledgePoint.title}}</text>
+    <text class="subtitle">{{knowledgePoint.description}}</text>
+  </view>
+
+  <progress-summary
+    status="{{progress.status}}"
+    totalAttempts="{{progress.totalAttempts}}"
+    wrongAttempts="{{progress.wrongAttempts}}"
+    dueReviews="{{progress.dueReviews}}"
+  />
+
+  <view class="sectionList">
+    <button
+      wx:for="{{lessons}}"
+      wx:key="id"
+      class="lessonButton"
+      data-lesson-id="{{item.id}}"
+      bindtap="openLesson"
+    >
+      <text>第 {{item.orderIndex}} 环节</text>
+      <text>{{item.title}}</text>
+    </button>
+  </view>
+
+  <view class="footerActions">
+    <button bindtap="openReview">错题复习</button>
+    <button bindtap="resetProgress">重置进度</button>
   </view>
 </view>

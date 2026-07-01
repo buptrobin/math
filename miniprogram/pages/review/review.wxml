@@ -1,0 +1,12 @@
+<view class="page reviewPage">
+  <view class="header">
+    <text class="title">错题复习</text>
+    <text class="subtitle">到期任务 {{tasks.length}} 个</text>
+  </view>
+  <view wx:if="{{!tasks.length}}" class="empty">当前没有到期复习任务。</view>
+  <view wx:for="{{tasks}}" wx:key="id" class="task">
+    <text>{{item.questionText}}</text>
+    <text class="stage">{{item.reviewStage}}</text>
+    <button size="mini" type="primary" data-id="{{item.id}}" bindtap="completeTask">完成复习</button>
+  </view>
+</view>

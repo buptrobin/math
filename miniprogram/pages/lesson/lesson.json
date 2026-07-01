@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "课程练习",
+  "usingComponents": {
+    "question-card": "../../components/question-card/question-card"
+  }
+}

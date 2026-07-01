@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "函数定义域教练"
+  "navigationBarTitleText": "函数定义域教练",
+  "usingComponents": {
+    "progress-summary": "../../components/progress-summary/progress-summary"
+  }
 }
