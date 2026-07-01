@@ -36,4 +36,9 @@ describe("mini program math text fallback", () => {
     expect(formatMathText("$x>1$")).toBe("x>1");
     expect(formatMathText("$x\\ge 1$")).toBe("x≥1");
   });
+
+  it("formats square roots inside fractions without leaving latex commands", () => {
+    expect(formatMathText("$y=\\frac{\\sqrt{x-1}}{x-3}$")).toBe("y=√(x-1)/(x-3)");
+    expect(formatMathText("$y=\\frac{1}{\\sqrt{x-2}}$")).toBe("y=1/(√(x-2))");
+  });
 });
