@@ -33,16 +33,16 @@
   display: flex;
   flex-direction: column;
   gap: 14rpx;
-  width: calc(100% + 72rpx);
-  margin: 0 -36rpx;
+  align-items: center;
+  width: 100%;
 }
 
 .lessonButton {
   display: flex;
   align-items: center;
   gap: 24rpx;
-  width: 100%;
-  margin: 0;
+  width: 680rpx;
+  max-width: 100%;
   min-height: 92rpx;
   padding: 0 22rpx;
   text-align: left;

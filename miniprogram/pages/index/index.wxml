@@ -13,7 +13,7 @@
   />
 
   <view class="sectionList">
-    <button
+    <view
       wx:for="{{lessons}}"
       wx:key="id"
       class="lessonButton"
@@ -22,7 +22,7 @@
     >
       <text class="lessonOrder">第 {{item.orderIndex}} 环节</text>
       <text class="lessonTitle">{{item.title}}</text>
-    </button>
+    </view>
   </view>
 
   <view class="footerActions">
