@@ -31,4 +31,9 @@ describe("mini program math text fallback", () => {
   it("turns simple latex into readable text", () => {
     expect(formatMathText("$y=\\frac{1}{x-2}$，$x\\ge 1$")).toBe("y=1/(x-2)，x≥1");
   });
+
+  it("removes inline math delimiters from simple inequality options", () => {
+    expect(formatMathText("$x>1$")).toBe("x>1");
+    expect(formatMathText("$x\\ge 1$")).toBe("x≥1");
+  });
 });

@@ -8,14 +8,22 @@ Component({
   data: {
     answer: "",
     selectedChoiceLabel: "",
+    displayOptions: [] as Array<{ label: string; value: string; text: string }>,
     visibleHints: [] as string[],
     displayQuestionText: ""
   },
   observers: {
-    question(this: any, question: { questionText: string } | null) {
+    question(this: any, question: { questionText: string; options?: string[] } | null) {
+      const displayOptions =
+        question?.options?.map((option, index) => ({
+          label: String.fromCharCode(65 + index),
+          value: option,
+          text: formatMathText(option)
+        })) ?? [];
       this.setData({
         answer: "",
         selectedChoiceLabel: "",
+        displayOptions,
         visibleHints: [],
         displayQuestionText: question ? formatMathText(question.questionText) : ""
       });
@@ -23,10 +31,9 @@ Component({
   },
   methods: {
     selectOption(this: any, event: WechatMiniprogram.TouchEvent) {
-      const index = Number(event.currentTarget.dataset.index ?? 0);
       this.setData({
         answer: String(event.currentTarget.dataset.answer ?? ""),
-        selectedChoiceLabel: String.fromCharCode(65 + index)
+        selectedChoiceLabel: String(event.currentTarget.dataset.label ?? "")
       });
     },
     onInput(this: any, event: WechatMiniprogram.Input) {
@@ -35,7 +42,7 @@ Component({
     showHint(this: any) {
       const question = this.properties.question as { hints?: string[] } | null;
       const hints = question?.hints ?? [];
-      const next = hints.slice(0, this.data.visibleHints.length + 1);
+      const next = hints.slice(0, this.data.visibleHints.length + 1).map(formatMathText);
       this.setData({ visibleHints: next });
     },
     submit(this: any) {
