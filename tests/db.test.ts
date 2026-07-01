@@ -6,8 +6,9 @@ describe("createAppDatabase", () => {
     const db = createAppDatabase(":memory:");
 
     expect(db.getKnowledgePoint()?.title).toBe("函数定义域");
-    expect(db.getLessons()).toHaveLength(7);
+    expect(db.getLessons()).toHaveLength(8);
     expect(db.getQuestionsByLesson("lesson-domain-diagnostic")).toHaveLength(5);
+    expect(db.getQuestionsByLesson("lesson-domain-gaokao")).toHaveLength(5);
 
     db.close();
   });
@@ -54,7 +55,7 @@ describe("createAppDatabase", () => {
 
     expect(db.getAttempts("demo-student")).toHaveLength(0);
     expect(db.getDueReviewTasks("demo-student", new Date("2999-01-01T00:00:00.000Z"))).toHaveLength(0);
-    expect(db.getLessons()).toHaveLength(7);
+    expect(db.getLessons()).toHaveLength(8);
     expect(db.getQuestionsByLesson("lesson-domain-diagnostic")).toHaveLength(5);
 
     db.close();

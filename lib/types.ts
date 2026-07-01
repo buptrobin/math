@@ -4,6 +4,7 @@ export type SectionType =
   | "textbook_explanation"
   | "example_breakdown"
   | "variation_practice"
+  | "gaokao_challenge"
   | "feynman_output"
   | "review";
 
