@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   gap: 14rpx;
-  margin: 0 -12rpx;
+  margin: 0 -28rpx;
 }
 
 .lessonButton {
