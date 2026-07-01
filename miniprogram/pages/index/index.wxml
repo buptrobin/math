@@ -20,8 +20,8 @@
       data-lesson-id="{{item.id}}"
       bindtap="openLesson"
     >
-      <text>第 {{item.orderIndex}} 环节</text>
-      <text>{{item.title}}</text>
+      <text class="lessonOrder">第 {{item.orderIndex}} 环节</text>
+      <text class="lessonTitle">{{item.title}}</text>
     </button>
   </view>
 

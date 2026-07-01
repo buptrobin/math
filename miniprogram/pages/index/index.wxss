@@ -33,18 +33,40 @@
   display: flex;
   flex-direction: column;
   gap: 14rpx;
+  width: 100%;
 }
 
 .lessonButton {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 24rpx;
+  width: 100%;
   min-height: 92rpx;
   padding: 0 22rpx;
   text-align: left;
   background: #ffffff;
   border: 1rpx solid #d8e2dc;
   border-radius: 8rpx;
+  box-sizing: border-box;
+  line-height: 1.2;
+}
+
+.lessonOrder {
+  flex: 0 0 150rpx;
+  white-space: nowrap;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.lessonTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 30rpx;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .footerActions {
