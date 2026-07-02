@@ -2,7 +2,7 @@
   <block wx:for="{{segments}}" wx:key="index">
     <text wx:if="{{item.type === 'text'}}" class="mathText">{{item.text}}</text>
     <scroll-view wx:elif="{{item.block}}" class="mathScroll" scroll-x>
-      <rich-text nodes="{{item.nodes}}"></rich-text>
+      <rich-text class="mathBlockContent" nodes="{{item.nodes}}"></rich-text>
     </scroll-view>
     <rich-text wx:else class="mathInline" nodes="{{item.nodes}}"></rich-text>
   </block>

@@ -16,8 +16,20 @@
 .mathScroll {
   display: block;
   width: 100%;
+  min-height: 112rpx;
   box-sizing: border-box;
-  margin: 10rpx 0;
+  margin: 10rpx 0 14rpx;
+  padding: 18rpx 0;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.mathBlockContent {
+  display: block;
+  min-height: 76rpx;
+  line-height: 1.4;
+}
+
+.mathScroll .katex-display {
+  margin: 0;
 }
