@@ -27,49 +27,56 @@ export type MathSegment =
     };
 
 export function renderMathSegments(content: string): MathSegment[] {
-  const matches = Array.from(content.matchAll(/(\$\$[^$]+\$\$|\$[^$]+\$)/g));
+  const pattern = /(\$\$[^$]+\$\$|\$[^$]+\$)/g;
+  const matches = Array.from(content.matchAll(pattern));
   if (!matches.length) {
     return [{ type: "text", text: content }];
   }
 
-  const hasBlockFormula = matches.some((match) => {
-    const raw = match[0];
-    const isDisplay = raw.startsWith("$$");
-    const latex = raw.slice(isDisplay ? 2 : 1, isDisplay ? -2 : -1);
-    return isDisplay || isComplexFormula(latex);
-  });
-
-  if (!hasBlockFormula) {
+  if (!matches.some((match) => shouldDisplayFormula(match[0]))) {
     return [{ type: "math", block: false, nodes: renderMathNodes(content) }];
   }
 
   const segments: MathSegment[] = [];
-  const pattern = /(\$\$[^$]+\$\$|\$[^$]+\$)/g;
+  let inlineRun = "";
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
   while ((match = pattern.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      segments.push({ type: "text", text: content.slice(lastIndex, match.index) });
+      inlineRun += content.slice(lastIndex, match.index);
     }
 
     const raw = match[0];
     const isDisplay = raw.startsWith("$$");
     const latex = raw.slice(isDisplay ? 2 : 1, isDisplay ? -2 : -1);
-    const block = isDisplay || isComplexFormula(latex);
-    segments.push({
-      type: "math",
-      block,
-      nodes: renderLatexNodes(latex, block)
-    });
+    if (shouldDisplayFormula(raw)) {
+      pushInlineRun(segments, inlineRun);
+      inlineRun = "";
+      segments.push({
+        type: "math",
+        block: true,
+        nodes: renderLatexNodes(latex, true)
+      });
+    } else {
+      inlineRun += raw;
+    }
     lastIndex = match.index + raw.length;
   }
 
   if (lastIndex < content.length) {
-    segments.push({ type: "text", text: content.slice(lastIndex) });
+    inlineRun += content.slice(lastIndex);
   }
+  pushInlineRun(segments, inlineRun);
 
   return segments.length ? segments : [{ type: "text", text: content }];
+}
+
+function pushInlineRun(segments: MathSegment[], content: string) {
+  if (!content) {
+    return;
+  }
+  segments.push({ type: "math", block: false, nodes: renderMathNodes(content) });
 }
 
 function renderLatexNodes(latex: string, displayMode: boolean) {
@@ -81,5 +88,11 @@ function renderLatexNodes(latex: string, displayMode: boolean) {
 }
 
 function isComplexFormula(latex: string) {
-  return latex.length > 24;
+  return latex.includes("\\frac") || latex.includes("\\sqrt") || latex.length > 24;
+}
+
+function shouldDisplayFormula(raw: string) {
+  const isDisplay = raw.startsWith("$$");
+  const latex = raw.slice(isDisplay ? 2 : 1, isDisplay ? -2 : -1);
+  return isDisplay || isComplexFormula(latex);
 }

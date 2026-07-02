@@ -8,6 +8,7 @@
     "app:stop": "powershell -ExecutionPolicy Bypass -File scripts/stop.ps1",
     "build": "next build",
     "start": "next start",
+    "miniprogram:build-js": "tsc -p miniprogram/tsconfig.json --noEmit false",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "lint": "next lint"
