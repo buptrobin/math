@@ -15,9 +15,7 @@
     "minifyWXML": true,
     "localPlugins": false,
     "disableUseStrict": false,
-    "useCompilerPlugins": [
-      "typescript"
-    ],
+    "useCompilerPlugins": false,
     "condition": false,
     "swc": false,
     "disableSWC": true,
@@ -38,5 +36,6 @@
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }
