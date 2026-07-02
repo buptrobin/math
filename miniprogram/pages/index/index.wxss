@@ -29,6 +29,33 @@
   font-size: 28rpx;
 }
 
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12rpx;
+  padding: 20rpx;
+  background: #ffffff;
+  border: 1rpx solid #d8e2dc;
+  border-radius: 8rpx;
+}
+
+.summaryLabel,
+.summaryValue {
+  display: block;
+  text-align: center;
+}
+
+.summaryLabel {
+  color: #667085;
+  font-size: 22rpx;
+}
+
+.summaryValue {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
 .sectionList {
   display: flex;
   flex-direction: column;

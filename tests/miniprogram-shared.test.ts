@@ -117,4 +117,13 @@ describe("mini program rich math rendering", () => {
     expect(readFileSync("miniprogram/pages/lesson/lesson.js", "utf8")).toContain("Page(");
     expect(readFileSync("miniprogram/pages/review/review.js", "utf8")).toContain("Page(");
   });
+
+  it("keeps the index page free of the progress-summary component dependency", () => {
+    const indexJson = JSON.parse(readFileSync("miniprogram/pages/index/index.json", "utf8"));
+    const indexWxml = readFileSync("miniprogram/pages/index/index.wxml", "utf8");
+
+    expect(indexJson.usingComponents?.["progress-summary"]).toBeUndefined();
+    expect(indexWxml).not.toContain("<progress-summary");
+    expect(indexWxml).toContain('class="summary"');
+  });
 });

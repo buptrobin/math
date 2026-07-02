@@ -5,12 +5,12 @@
     <text class="subtitle">{{knowledgePoint.description}}</text>
   </view>
 
-  <progress-summary
-    status="{{progress.status}}"
-    totalAttempts="{{progress.totalAttempts}}"
-    wrongAttempts="{{progress.wrongAttempts}}"
-    dueReviews="{{progress.dueReviews}}"
-  />
+  <view class="summary">
+    <view><text class="summaryLabel">状态</text><text class="summaryValue">{{progress.status}}</text></view>
+    <view><text class="summaryLabel">作答</text><text class="summaryValue">{{progress.totalAttempts}}</text></view>
+    <view><text class="summaryLabel">错题</text><text class="summaryValue">{{progress.wrongAttempts}}</text></view>
+    <view><text class="summaryLabel">待复习</text><text class="summaryValue">{{progress.dueReviews}}</text></view>
+  </view>
 
   <view class="sectionList">
     <view
