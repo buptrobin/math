@@ -90,13 +90,15 @@ describe("mini program rich math rendering", () => {
     expect(JSON.stringify(segments[1])).toContain("可以等于");
   });
 
-  it("loads katex styles inside the mini program math component", () => {
+  it("lets the mini program math component consume global katex styles safely", () => {
     const json = JSON.parse(readFileSync("miniprogram/components/math-rich-text/math-rich-text.json", "utf8"));
     const wxss = readFileSync("miniprogram/components/math-rich-text/math-rich-text.wxss", "utf8");
+    const appWxss = readFileSync("miniprogram/app.wxss", "utf8");
 
-    expect(json.options.styleIsolation).toBe("shared");
-    expect(wxss).toContain("@rojer/katex-mini/index.wxss");
-    expect(wxss).toContain(":host");
+    expect(json.options.styleIsolation).toBe("apply-shared");
+    expect(appWxss).toContain("@rojer/katex-mini/index.wxss");
+    expect(wxss).not.toContain("@rojer/katex-mini/index.wxss");
+    expect(wxss).not.toContain(":host");
     expect(wxss).toContain("width: 100%");
   });
 

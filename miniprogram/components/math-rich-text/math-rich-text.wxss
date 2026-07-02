@@ -1,11 +1,3 @@
-@import "../../miniprogram_npm/@rojer/katex-mini/index.wxss";
-
-:host {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .mathRichText {
   width: 100%;
   box-sizing: border-box;
